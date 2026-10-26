@@ -1,5 +1,3 @@
-flask
+Flask
 gunicorn
-transformers
-torch
 scikit-learn

@@ -1,57 +1,50 @@
 
 from flask import Flask, render_template, request, jsonify
-from transformers import pipeline
+from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+import csv
 import json
-import os
+from pathlib import Path
 
 app = Flask(__name__)
 
-MODEL_NAME = "didulantha/sms-spam-detector"
-
-print("Loading pretrained spam detection model...")
-
-classifier = pipeline(
-    "text-classification",
-    model=MODEL_NAME,
-    device=-1
-)
-
-print("Model loaded successfully!")
+BASE_DIR = Path(__file__).resolve().parent
+DATASET_PATH = BASE_DIR / "dataset" / "SMSSpamCollection"
+METRICS_PATH = BASE_DIR / "metrics.json"
 
 
-def predict_message(message):
-    result = classifier(
-        message,
-        truncation=True,
-        max_length=128
-    )[0]
+def load_dataset():
+    messages = []
+    labels = []
 
-    label = result["label"].strip().lower()
-    confidence = float(result["score"])
+    with open(DATASET_PATH, "r", encoding="utf-8") as file:
+        reader = csv.reader(file, delimiter="\t")
 
-    # Map the model's labels to SPAM or HAM
-    if label in ["spam", "label_1", "1"]:
-        prediction = "SPAM"
-    elif label in ["ham", "not spam", "not_spam", "label_0", "0"]:
-        prediction = "HAM"
-    else:
-        raise ValueError(f"Unexpected model label: {result['label']}")
+        for row in reader:
+            if len(row) >= 2:
+                labels.append(row[0].strip().lower())
+                messages.append("\t".join(row[1:]))
 
-    return prediction, confidence
+    return messages, labels
+
+
+messages, labels = load_dataset()
+
+model = Pipeline([
+    ("tfidf", TfidfVectorizer(stop_words="english")),
+    ("classifier", LogisticRegression(max_iter=1000))
+])
+
+model.fit(messages, labels)
 
 
 def load_metrics():
-    if os.path.exists("metrics.json"):
+    if METRICS_PATH.exists():
         try:
-            with open("metrics.json", "r", encoding="utf-8") as file:
-                metrics = json.load(file)
-
-            required = ["accuracy", "precision", "recall", "f1_score"]
-
-            if all(key in metrics for key in required):
-                return metrics
-
-        except (json.JSONDecodeError, OSError):
+            with open(METRICS_PATH, "r", encoding="utf-8") as file:
+                return json.load(file)
+        except (OSError, json.JSONDecodeError):
             pass
 
     return {}
@@ -59,8 +52,7 @@ def load_metrics():
 
 @app.route("/")
 def home():
-    metrics = load_metrics()
-    return render_template("index.html", metrics=metrics)
+    return render_template("index.html", metrics=load_metrics())
 
 
 @app.route("/predict", methods=["POST"])
@@ -69,25 +61,20 @@ def predict():
     message = str(data.get("message", "")).strip()
 
     if not message:
-        return jsonify({
-            "error": "Please enter an SMS message."
-        }), 400
+        return jsonify({"error": "Please enter an SMS message."}), 400
 
-    try:
-        prediction, confidence = predict_message(message)
+    probabilities = model.predict_proba([message])[0]
+    classes = model.named_steps["classifier"].classes_
+    predicted_index = probabilities.argmax()
 
-        return jsonify({
-            "prediction": prediction,
-            "confidence": round(confidence * 100, 2)
-        })
+    prediction = classes[predicted_index].upper()
+    confidence = float(probabilities[predicted_index]) * 100
 
-    except Exception:
-        app.logger.exception("Message prediction failed")
-
-        return jsonify({
-            "error": "Unable to classify the message. Check the model setup."
-        }), 500
+    return jsonify({
+        "prediction": prediction,
+        "confidence": round(confidence, 2)
+    })
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="127.0.0.1", port=5000)
+    app.run()
