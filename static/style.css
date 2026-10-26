@@ -5,34 +5,59 @@
 
 body {
     margin: 0;
-    padding: 30px 16px;
-    font-family: Arial, sans-serif;
+    padding: 25px 16px;
+    font-family: Arial, Helvetica, sans-serif;
     background: #f1f5f9;
     color: #1e293b;
 }
 
 .container {
-    max-width: 650px;
-    margin: 30px auto;
+    max-width: 720px;
+    margin: 0 auto;
 }
 
-h1 {
+.header {
     text-align: center;
+    margin: 20px 0 28px;
+}
+
+.icon {
+    display: inline-flex;
+    width: 55px;
+    height: 55px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: #dbeafe;
     color: #1d4ed8;
+    font-size: 30px;
 }
 
-.subtitle {
-    text-align: center;
+.header h1 {
+    margin-bottom: 10px;
+    color: #1d4ed8;
+    font-size: 32px;
+}
+
+.header p,
+.section-description {
     color: #64748b;
-    margin-bottom: 28px;
+    line-height: 1.6;
 }
 
 .card {
-    background: white;
-    padding: 24px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+    background: #ffffff;
+    padding: 25px;
+    margin-bottom: 22px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.06);
+}
+
+.card h2 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    font-size: 21px;
+    color: #1e293b;
 }
 
 label {
@@ -42,12 +67,15 @@ label {
 }
 
 textarea {
+    display: block;
     width: 100%;
     min-height: 140px;
-    padding: 12px;
+    padding: 14px;
     border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    font: inherit;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.5;
     resize: vertical;
 }
 
@@ -58,14 +86,16 @@ textarea:focus {
 
 button {
     width: 100%;
-    margin-top: 14px;
-    padding: 13px;
+    margin-top: 15px;
+    padding: 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 9px;
     background: #2563eb;
     color: white;
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
+    transition: background 0.2s;
 }
 
 button:hover {
@@ -73,33 +103,90 @@ button:hover {
 }
 
 button:disabled {
-    opacity: 0.6;
+    opacity: 0.65;
     cursor: wait;
 }
 
 .result {
-    margin-top: 16px;
-    padding: 12px;
-    border-radius: 8px;
     display: none;
+    margin-top: 16px;
+    padding: 15px;
+    border-radius: 9px;
+    line-height: 1.5;
     overflow-wrap: anywhere;
 }
 
-.spam {
+.result.spam {
     display: block;
     color: #991b1b;
     background: #fee2e2;
+    border: 1px solid #fecaca;
 }
 
-.ham {
+.result.ham {
     display: block;
     color: #166534;
     background: #dcfce7;
+    border: 1px solid #bbf7d0;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.metric {
+    padding: 22px 12px;
+    text-align: center;
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+}
+
+.metric-icon {
+    font-size: 24px;
+}
+
+.metric h3 {
+    margin: 12px 0 8px;
+    font-size: 15px;
+    color: #475569;
+}
+
+.metric p {
+    margin: 0;
+    color: #1d4ed8;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.metrics-missing {
+    padding: 14px;
+    background: #fff7ed;
+    border-radius: 8px;
+    color: #9a3412;
+    line-height: 1.6;
+}
+
+.about p {
+    line-height: 1.7;
 }
 
 .note {
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 8px;
     color: #64748b;
-    font-size: 14px;
+    font-size: 13px;
+}
+
+footer {
+    padding: 10px;
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
 }
 
 @media (max-width: 480px) {
@@ -107,11 +194,23 @@ button:disabled {
         padding: 12px;
     }
 
-    .container {
-        margin: 12px auto;
+    .header h1 {
+        font-size: 26px;
     }
 
     .card {
         padding: 18px;
+    }
+
+    .metrics-grid {
+        gap: 10px;
+    }
+
+    .metric {
+        padding: 18px 8px;
+    }
+
+    .metric p {
+        font-size: 24px;
     }
 }

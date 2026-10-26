@@ -4,26 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>SMS Spam Detection</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
     <script src="{{ url_for('static', filename='script.js') }}"
             defer></script>
 </head>
 
 <body>
     <main class="container">
-        <h1>SMS Spam Detection</h1>
-        <p class="subtitle">
-            Check whether a text message is spam or legitimate.
-        </p>
+
+        <header class="header">
+            <div class="icon">✉</div>
+            <h1>SMS Spam Detection</h1>
+            <p>Detect spam messages using a pretrained AI model.</p>
+        </header>
 
         <section class="card">
+            <h2>Check Your Message</h2>
+
             <label for="message">Enter your SMS message</label>
 
-            <textarea id="message"
-                      placeholder="Type your message here..."></textarea>
+            <textarea
+                id="message"
+                placeholder="Type or paste your SMS message here..."
+                maxlength="5000"
+            ></textarea>
 
             <button id="checkButton" type="button">
                 Check Message
@@ -34,16 +43,77 @@
         </section>
 
         <section class="card">
-            <h2>How it works</h2>
+            <h2>Model Performance</h2>
+            <p class="section-description">
+                Evaluation results calculated using the labeled test dataset.
+            </p>
+
+            {% if metrics %}
+            <div class="metrics-grid">
+
+                <div class="metric">
+                    <span class="metric-icon">🎯</span>
+                    <h3>Accuracy</h3>
+                    <p>
+                        {{ "%.2f"|format(metrics["accuracy"] * 100) }}%
+                    </p>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-icon">🔍</span>
+                    <h3>Precision</h3>
+                    <p>
+                        {{ "%.2f"|format(metrics["precision"] * 100) }}%
+                    </p>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-icon">📨</span>
+                    <h3>Recall</h3>
+                    <p>
+                        {{ "%.2f"|format(metrics["recall"] * 100) }}%
+                    </p>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-icon">📊</span>
+                    <h3>F1-Score</h3>
+                    <p>
+                        {{ "%.2f"|format(metrics["f1_score"] * 100) }}%
+                    </p>
+                </div>
+
+            </div>
+            {% else %}
+                <p class="metrics-missing">
+                    Evaluation metrics are not available.
+                    Run <code>python evaluate_model.py</code> first.
+                </p>
+            {% endif %}
+        </section>
+
+        <section class="card about">
+            <h2>About This Project</h2>
             <p>
-                This application uses a pretrained DistilBERT
-                text-classification model to predict whether an SMS
-                is spam or legitimate.
+                This project uses a pretrained DistilBERT text-classification
+                model to identify spam and legitimate SMS messages.
+            </p>
+            <p>
+                <strong>Spam:</strong> Suspicious or unwanted messages.
+            </p>
+            <p>
+                <strong>Ham:</strong> Legitimate messages.
             </p>
             <p class="note">
-                Predictions are not guaranteed to be correct.
+                Model predictions and confidence scores are not guarantees
+                of correctness.
             </p>
         </section>
+
+        <footer>
+            SMS Spam Detection System | Machine Learning Microproject
+        </footer>
+
     </main>
 </body>
 </html>
