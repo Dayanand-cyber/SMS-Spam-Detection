@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Spam Detection</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"
+            defer></script>
+</head>
+
+<body>
+    <main class="container">
+        <h1>SMS Spam Detection</h1>
+        <p class="subtitle">
+            Check whether a text message is spam or legitimate.
+        </p>
+
+        <section class="card">
+            <label for="message">Enter your SMS message</label>
+
+            <textarea id="message"
+                      placeholder="Type your message here..."></textarea>
+
+            <button id="checkButton" type="button">
+                Check Message
+            </button>
+
+            <div id="result" class="result" role="status"
+                 aria-live="polite"></div>
+        </section>
+
+        <section class="card">
+            <h2>How it works</h2>
+            <p>
+                This application uses a pretrained DistilBERT
+                text-classification model to predict whether an SMS
+                is spam or legitimate.
+            </p>
+            <p class="note">
+                Predictions are not guaranteed to be correct.
+            </p>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,117 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 30px 16px;
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.container {
+    max-width: 650px;
+    margin: 30px auto;
+}
+
+h1 {
+    text-align: center;
+    color: #1d4ed8;
+}
+
+.subtitle {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 28px;
+}
+
+.card {
+    background: white;
+    padding: 24px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font: inherit;
+    resize: vertical;
+}
+
+textarea:focus {
+    outline: 2px solid #93c5fd;
+    border-color: #2563eb;
+}
+
+button {
+    width: 100%;
+    margin-top: 14px;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.result {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    display: none;
+    overflow-wrap: anywhere;
+}
+
+.spam {
+    display: block;
+    color: #991b1b;
+    background: #fee2e2;
+}
+
+.ham {
+    display: block;
+    color: #166534;
+    background: #dcfce7;
+}
+
+.note {
+    color: #64748b;
+    font-size: 14px;
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 12px;
+    }
+
+    .container {
+        margin: 12px auto;
+    }
+
+    .card {
+        padding: 18px;
+    }
+}
